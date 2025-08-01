@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Girlfriend's Day, Arban 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffe0f0, #ffe8fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #quiz-container {
+      text-align: center;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      display: none;
+    }
+
+    h1 {
+      font-size: 22px;
+      color: #d63384;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      background-color: #f8c1e1;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background-color: #e89dc8;
+    }
+
+    #start-screen {
+      text-align: center;
+    }
+
+    #start-btn {
+      padding: 15px 25px;
+      font-size: 18px;
+      background-color: #d63384;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #start-btn:hover {
+      background-color: #c12070;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    input[type="submit"] {
+      margin-top: 10px;
+      background: #d63384;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+      background: #c12070;
+    }
+  </style>
+</head>
+<body>
+
+<div id="start-screen">
+  <h1>Hey Arban! 💕</h1>
+  <p>Happy Girlfriend's Day! I made this just for you 💌</p>
+  <button id="start-btn">Start Game 💖</button>
+</div>
+
+<div id="quiz-container">
+  <h1 id="question">Loading...</h1>
+  <div id="options"></div>
+</div>
+
+<script>
+  const startBtn = document.getElementById("start-btn");
+  const startScreen = document.getElementById("start-screen");
+  const quizContainer = document.getElementById("quiz-container");
+  const questionElem = document.getElementById("question");
+  const optionsElem = document.getElementById("options");
+
+  let currentQuestion = 0;
+
+  const questions = [
+    {
+      question: "What's your boyfriend's name?",
+      options: [
+        { text: "Alex", correct: false },
+        { text: "Mark", correct: false },
+        { text: "Brian", correct: false },
+        { text: "Collins", correct: true }
+      ],
+      wrongMsg: "Uh-oh… Don’t break my heart like that! 😭",
+      rightMsg: "Yesss! That’s me — your one and only 😎💕"
+    },
+    {
+      question: "How many times does he think of you daily?",
+      options: [
+        { text: "2", correct: false },
+        { text: "10", correct: false },
+        { text: "100", correct: false },
+        { text: "Infinity ♾️", correct: true }
+      ],
+      wrongMsg: "Only that? I think of you even in my dreams 💤",
+      rightMsg: "Correct! You live in my head rent-free 😍"
+    },
+    {
+      question: "What’s Collins’ secret power?",
+      options: [
+        { text: "Cooking", correct: false },
+        { text: "Lifting heavy stuff", correct: false },
+        { text: "Loving you deeply ❤️", correct: true },
+        { text: "Falling asleep everywhere 😴", correct: false }
+      ],
+      wrongMsg: "Haha, not exactly. But close!",
+      rightMsg: "Loving you is my real superpower 💼💘"
+    },
+    {
+      question: "What does he love most about you?",
+      options: [
+        { text: "Your voice 🎤", correct: false },
+        { text: "Your face 😍", correct: false },
+        { text: "Your intelligence 🧠", correct: false },
+        { text: "Everything 💖", correct: true }
+      ],
+      wrongMsg: "Well yes… but it’s more than that 🥺",
+      rightMsg: "Everything about you is lovable. Everything 💝"
+    },
+    {
+      question: "If he had one wish, what would it be?",
+      options: [
+        { text: "Unlimited Wi-Fi", correct: false },
+        { text: "World peace ✌️", correct: false },
+        { text: "Endless samosas 🥟", correct: false },
+        { text: "Forever with Arban 💍", correct: true }
+      ],
+      wrongMsg: "Okay samosas are tempting… but no 💔",
+      rightMsg: "Forever with you — my ultimate wish ❤️"
+    },
+    {
+      question: "What does he want to do today for Girlfriend’s Day?",
+      options: [
+        { text: "Dance for you 💃", correct: false },
+        { text: "Sing for you 🎤", correct: false },
+        { text: "Supper on your man 🍛", correct: false },
+        { text: "All the above 😇", correct: true }
+      ],
+      wrongMsg: "Just one? Arban deserves the whole package! 💐",
+      rightMsg: "All of the above — you’re worth every effort 👑"
+    }
+  ];
+
+  const gifts = [
+    { text: "💞 A letter to your soul", message: "If I could write all I feel for you, Arban, the words would stretch beyond the stars 🌌" },
+    { text: "🎥 A memory of us", message: "Close your eyes and remember our best moments — I hold each one close to my heart ❤️" },
+    { text: "🌹 A virtual rose garden", message: "Each petal is a reason why I love you. And the garden? Endless. 🌹🌹🌹" },
+    { text: "⏳ A promise of forever", message: "No matter what happens, you’ll always have me — your #1 fan, your peace, your person 💍" }
+  ];
+
+  startBtn.addEventListener("click", () => {
+    startScreen.style.display = "none";
+    quizContainer.style.display = "block";
+    showQuestion();
+  });
+
+  function showQuestion() {
+    if (currentQuestion < questions.length) {
+      const q = questions[currentQuestion];
+      questionElem.textContent = q.question;
+      optionsElem.innerHTML = "";
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.classList.add("btn");
+        btn.textContent = opt.text;
+        btn.onclick = () => checkAnswer(opt.correct, q);
+        optionsElem.appendChild(btn);
+      });
+    } else {
+      showGiftSelection();
+    }
+  }
+
+  function checkAnswer(isCorrect, q) {
+    if (isCorrect) {
+      fireConfetti();
+      Swal.fire({
+        icon: 'success',
+        title: q.rightMsg,
+        confirmButtonText: 'Next ➡️'
+      }).then(() => {
+        currentQuestion++;
+        showQuestion();
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: "Oops!",
+        text: q.wrongMsg,
+        confirmButtonText: "Try Again"
+      });
+    }
+  }
+
+  function showGiftSelection() {
+    questionElem.textContent = "Pick your Girlfriend’s Day gift 🎁";
+    optionsElem.innerHTML = "";
+    gifts.forEach(gift => {
+      const btn = document.createElement("button");
+      btn.classList.add("btn");
+      btn.textContent = gift.text;
+      btn.onclick = () => {
+        fireConfetti();
+        Swal.fire({
+          title: "Aww! 💖",
+          text: gift.message,
+          icon: "success",
+          confirmButtonText: "Final Surprise 💌"
+        }).then(() => showMessageForm());
+      };
+      optionsElem.appendChild(btn);
+    });
+  }
+
+  function showMessageForm() {
+    questionElem.textContent = "Write a message back to Collins 💌";
+    optionsElem.innerHTML = `
+      <form action="https://formsubmit.co/collinoketcho@gmail.com" method="POST">
+        <textarea name="message" placeholder="Type your message here to him..." required></textarea>
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="submit" value="Send 💌">
+      </form>
+    `;
+  }
+
+  function fireConfetti() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+</script>
+
+</body>
+</html>
